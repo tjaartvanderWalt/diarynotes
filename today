@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Get the current date
+YEAR=$(date +"%Y")
+MONTH_NAME=$(date +"%B")
+MONTH=$(date +"%m")
+DAY_NAME=$(date +"%A")
+DAY=$(date +"%d")
+DATE=$(date +"%d-%m-%Y")
+
+# Define the base directory (change this to your desired base directory)
+BASE_DIR="/Users/tvanderwalt/Desktop/work-diary"
+
+# Create the directory structure
+mkdir -p "$BASE_DIR/$YEAR/$MONTH_NAME"
+
+# Define the file path
+FILE_PATH="$BASE_DIR/$YEAR/$MONTH_NAME/$DATE.md"
+
+# Define the template file path
+TEMPLATE_FILE="./__template__.md"
+
+# Read the template file and replace placeholders with actual values
+sed -e "s/{{DAY_NAME}}/$DAY_NAME/" -e "s/{{DATE}}/$DATE/" "$TEMPLATE_FILE" > "$FILE_PATH"
+
+echo "Created $BASE_DIR/$YEAR/$MONTH/$DATE.md"
