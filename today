@@ -1,15 +1,31 @@
 #!/bin/bash
 
-# Get the current date
-YEAR=$(date +"%Y")
-MONTH_NAME=$(date +"%B")
-MONTH=$(date +"%m")
-DAY_NAME=$(date +"%A")
-DAY=$(date +"%d")
-DATE=$(date +"%d-%m-%Y")
+# Grab an optional day offset (e.g., 0 for today, -1 for yesterday).
+OFFSET=${1:-0}
+
+if ! [[ "$OFFSET" =~ ^[+-]?[0-9]+$ ]]; then
+	echo "Usage: $0 [day_offset]"
+	echo "Example: $0 -1"
+	exit 1
+fi
+
+if [[ "$OFFSET" == -* ]]; then
+	DATE_ADJUST="${OFFSET}d"
+else
+	OFFSET="${OFFSET#+}"
+	DATE_ADJUST="+${OFFSET}d"
+fi
+
+# Get the date using the provided offset
+YEAR=$(date -v"${DATE_ADJUST}" +"%Y")
+MONTH_NAME=$(date -v"${DATE_ADJUST}" +"%B")
+MONTH=$(date -v"${DATE_ADJUST}" +"%m")
+DAY_NAME=$(date -v"${DATE_ADJUST}" +"%A")
+DAY=$(date -v"${DATE_ADJUST}" +"%d")
+DATE=$(date -v"${DATE_ADJUST}" +"%d-%m-%Y")
 
 # Define the base directory (change this to your desired base directory)
-BASE_DIR="/Users/tvanderwalt/Desktop/work-diary"
+BASE_DIR="./"
 
 # Create the directory structure
 mkdir -p "$BASE_DIR/$YEAR/$MONTH_NAME"
@@ -23,4 +39,4 @@ TEMPLATE_FILE="./__template__.md"
 # Read the template file and replace placeholders with actual values
 sed -e "s/{{DAY_NAME}}/$DAY_NAME/" -e "s/{{DATE}}/$DATE/" "$TEMPLATE_FILE" > "$FILE_PATH"
 
-echo "Created $BASE_DIR/$YEAR/$MONTH/$DATE.md"
+echo "Created $FILE_PATH"
