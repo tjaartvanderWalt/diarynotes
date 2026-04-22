@@ -18,6 +18,20 @@ Running the script on subsequent days would cause the following folder structure
         - `07-03-2025.md`
         - `08-03-2025.md`
         - etc
+     
+## Generating a file for a different day than the current date
+
+If you need to generate a file for a different date than the current date, you can pass a negative or a positve offset to the script like so:
+
+```bash
+# passing -1 will generate a file for the previous day
+./today -1
+```
+
+```bash
+# passing +1 will generate a file for the next day
+./today +1
+```
 
 
 ## How to use this script.
